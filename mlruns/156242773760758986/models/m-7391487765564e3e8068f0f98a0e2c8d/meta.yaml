@@ -1,0 +1,10 @@
+artifact_location: file:///home/qili/ai-sprint/mlruns/156242773760758986/models/m-7391487765564e3e8068f0f98a0e2c8d/artifacts
+creation_timestamp: 1761451903784
+experiment_id: '156242773760758986'
+last_updated_timestamp: 1761451910363
+model_id: m-7391487765564e3e8068f0f98a0e2c8d
+model_type: null
+name: model
+source_run_id: b40b4901791d454e98038b425a134573
+status: 2
+status_message: null

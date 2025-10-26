@@ -1,0 +1,22 @@
+artifact_path: file:///home/qili/ai-sprint/mlruns/704455795276881309/models/m-abf2787539f7442c83d489a02c8b1b68/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.19
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.5.1
+model_id: m-abf2787539f7442c83d489a02c8b1b68
+model_size_bytes: 525
+model_uuid: m-abf2787539f7442c83d489a02c8b1b68
+prompts: null
+run_id: f5530245081c4494a8772311a8773839
+utc_time_created: '2025-10-25 09:23:46.885651'

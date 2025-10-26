@@ -23,7 +23,9 @@ app = FastAPI(title="Penguin Classifier API",
               version="0.1.0")
 
 # load model once at start-up
-model = joblib.load("penguin_logreg_pipeline.pkl")
+# model = joblib.load("penguin_logreg_pipeline.pkl")
+# load the model retrained on Day 5 which is trainned on github with auto workflow
+model = joblib.load("penguin_auto.pkl")
 
 class_names = ["Adelie", "Chinstrap", "Gentoo"]   # same order as sklearn
 
@@ -33,31 +35,23 @@ def root():
     return {"message": "send measurements to /predict"}
 
 
-# @app.post("/predict")
-# def predict(bill_length_mm: float,
-#             bill_depth_mm: float,
-#             flipper_length_mm: float,
-#             body_mass_g: float):
-#     """
-#     Predict penguin species from four numeric features.
-#     """
-#     X = pd.DataFrame([[bill_length_mm, bill_depth_mm,
-#                        flipper_length_mm, body_mass_g]],
-#                      columns=["bill_length_mm", "bill_depth_mm",
-#                               "flipper_length_mm", "body_mass_g"])
-#     # pred_idx = model.predict(X)[0]
-#     # probs = model.predict_proba(X)[0]
-#     # species = class_names[pred_idx]
-#     # confidence = float(probs.max())
-#     # return {"species": species, "confidence": confidence}
-#     pred_species = model.predict(X)[0]          # already a string
-#     probs = model.predict_proba(X)[0]
-#     confidence = float(probs.max())
-#     return {"species": pred_species, "confidence": confidence}
-
 @app.post("/predict", response_model=PredictionOut)
 def predict(measures: PenguinMeasures):
     X = pd.DataFrame([measures.dict()])
     pred_species = model.predict(X)[0]
     confidence = float(model.predict_proba(X).max())
     return PredictionOut(species=pred_species, confidence=confidence)
+
+    """ Example curl command:
+(ai-sprint) qili@NBK202500000057:~/ai-sprint$ curl -X 'POST' \
+  'http://127.0.0.1:8000/predict' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "bill_length_mm": 39.5,
+  "bill_depth_mm": 18.8,
+  "flipper_length_mm": 196,
+  "body_mass_g": 4100
+}'
+{"species":"Adelie","confidence":0.9936724776333471}
+"""

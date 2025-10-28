@@ -16,4 +16,5 @@ jobs:
           cache: "pip"          # ← all you need
 
       - run: pip install -r requirements.txt
+      - run: pip install pytest
       - run: pytest

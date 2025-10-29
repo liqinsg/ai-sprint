@@ -1,0 +1,43 @@
+name: Lint
+on:
+  pull_request:               # only run on PRs (save CI minutes)
+  push:
+    branches: [main]          # keep main green
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install linters
+        run: |
+          pip install black flake8 isort
+          # or `pip install -r requirements-dev.txt`
+
+      - name: black
+        run: black --check --diff .
+
+      - name: isort
+        run: isort --check-only --diff .
+
+      - name: flake8
+        run: flake8 .
+
+      - run: pip install pre-commit
+      - run: pre-commit run --all-files
+      - run: |
+          git fetch origin main
+          pre-commit run --from-ref origin/main --to-ref HEAD
+
+      - name: Lint with timing          # ← NEW
+        run: |
+          time black --check --diff .
+          time isort --check-only --diff .
+          time flake8 .
+          time pre-commit run --all-files    

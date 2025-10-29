@@ -1,8 +1,9 @@
-from fastapi import FastAPI
-from pydantic import BaseModel, Field
 from typing import List
+
 import joblib
 import pandas as pd
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
 
 app = FastAPI(title="Penguin Batch API", version="0.1.0")
 model = joblib.load("penguin_logreg_pipeline.pkl")
@@ -29,8 +30,10 @@ def predict_batch(batch: BatchIn):
     df = pd.DataFrame([r.dict() for r in batch.rows])
     preds = model.predict(df)
     probs = model.predict_proba(df)
-    results = [{"species": pred, "confidence": float(prob.max())}
-               for pred, prob in zip(preds, probs)]
+    results = [
+        {"species": pred, "confidence": float(prob.max())}
+        for pred, prob in zip(preds, probs)
+    ]
     return BatchOut(predictions=results)
 
     """ POST /predict_batch example

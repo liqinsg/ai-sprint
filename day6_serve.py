@@ -1,18 +1,19 @@
+import os
+
+import joblib
 import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
-import joblib
-import os
 
 app = FastAPI(title="MLflow-registry scorer")
 
 MODEL_NAME = "PenguinRF"
 # MODEL_STAGE = "Production"     # or "Staging", "1", "2" …
-MODEL_VERSION = "1"          # instead of "Production"
+MODEL_VERSION = "1"  # instead of "Production"
 # model = mlflow.pyfunc.load_model(f"models:/{MODEL_NAME}/{MODEL_VERSION}")
 # model = mlflow.sklearn.load_model(f"models:/{MODEL_NAME}/{MODEL_VERSION}")
-model = joblib.load(os.getenv("MODEL_PATH", "penguin_auto.pkl"))
-
+# model = joblib.load(os.getenv("MODEL_PATH", "penguin_auto.pkl"))
+model = joblib.load(os.getenv("MODEL_PATH", "penguin_xgb_tuned.pkl"))
 # model = mlflow.pyfunc.load_model(f"models:/{MODEL_NAME}/{MODEL_STAGE}")
 # model = mlflow.pyfunc.load_model("penguin_rf_tuned.pkl")   # plain file
 

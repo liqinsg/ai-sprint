@@ -1,15 +1,11 @@
+import os
+
 import mlflow
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
-
-# encode labels 0,1,2
-le = LabelEncoder()
-
-mlflow.set_tracking_uri("sqlite:///mlruns.db")  # local file
-mlflow.set_experiment("PenguinXGB")
 
 url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"
 df = pd.read_csv(url).dropna(
@@ -23,12 +19,6 @@ df = pd.read_csv(url).dropna(
 )
 X = df[["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]]
 y = df["species"]
-
-y_enc = le.fit_transform(y)
-X_train, X_test, y_train_enc, y_test_enc = train_test_split(
-    X, y_enc, test_size=0.2, random_state=42, stratify=y_enc
-)
-
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
@@ -48,9 +38,9 @@ param_grid = {
 
 with mlflow.start_run() as run:
     search = GridSearchCV(pipe, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
-    search.fit(X_train, y_train_enc)  # ← use encoded labels
+    search.fit(X_train, y_train)
     best_model = search.best_estimator_
     mlflow.log_params(search.best_params_)
     mlflow.log_metric("cv_acc", search.best_score_)
-    mlflow.sklearn.log_model(best_model, "model")
-    print("Run ID:", run.info.run_id)  # Run ID: 4203dd356b46479d97075141ecc63131
+    mlflow.sklearn.log_model(best_model, "model", registered_model_name="PenguinXGB")
+    print("Run ID:", run.info.run_id)

@@ -1,8 +1,7 @@
-from fastapi import FastAPI
 import joblib
 import numpy as np
 import pandas as pd
-
+from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
 
@@ -18,16 +17,18 @@ class PredictionOut(BaseModel):
     confidence: float
 
 
-app = FastAPI(title="Penguin Classifier API",
-              description="Logistic-regression model trained on Day 2",
-              version="0.1.0")
+app = FastAPI(
+    title="Penguin Classifier API",
+    description="Logistic-regression model trained on Day 2",
+    version="0.1.0",
+)
 
 # load model once at start-up
 # model = joblib.load("penguin_logreg_pipeline.pkl")
 # load the model retrained on Day 5 which is trainned on github with auto workflow
 model = joblib.load("penguin_auto.pkl")
 
-class_names = ["Adelie", "Chinstrap", "Gentoo"]   # same order as sklearn
+class_names = ["Adelie", "Chinstrap", "Gentoo"]  # same order as sklearn
 
 
 @app.get("/")

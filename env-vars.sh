@@ -1,0 +1,4 @@
+unset MLFLOW_TRACKING_URI DAGSHUB_USERNAME DAGSHUB_PASSWORD
+export MLFLOW_TRACKING_URI=https://dagshub.com/liqinsg/ai-sprint.mlflow
+export DAGSHUB_USERNAME=liqinsg
+export DAGSHUB_PASSWORD='8f91a3bd49d6b3c64fc61baf6b9a0aac5dbf1a3f'
